@@ -1,0 +1,38 @@
+name: "Issuer"
+description: "A GitHub Action to assign a custom issue number."
+inputs:
+  GITHUB_TOKEN:
+    description: "GitHub token"
+    required: true
+  ISSUE_GEN:
+    description: "Token for accessing the issue counter repository"
+    required: true
+  ISSUE_COUNTER_REPO:
+    description: "Repository for issue counter"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout this repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        python -m pip install requests
+
+    - name: Assign issue number
+      shell: bash
+      run: python ${{ github.action_path }}/main.py    
+      env:
+        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+        ISSUE_GEN: ${{ inputs.ISSUE_GEN }}
+        ISSUE_COUNTER_REPO: ${{ inputs.ISSUE_COUNTER_REPO }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        GITHUB_EVENT_ISSUE_NUMBER: ${{ github.event.issue.number }}
+        GITHUB_EVENT_ISSUE_TITLE: ${{ github.event.issue.title }}
