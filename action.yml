@@ -7,6 +7,9 @@ inputs:
   ISSUE_GEN:
     description: "Token for accessing the issue counter repository"
     required: true
+  ISSUE_PREFIX:
+    description: "Prefix for issue numbers"
+    required: true
   ISSUE_COUNTER_REPO:
     description: "Repository for issue counter"
     required: true
@@ -32,6 +35,7 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
         ISSUE_GEN: ${{ inputs.ISSUE_GEN }}
+        ISSUE_PREFIX: ${{ inputs.ISSUE_PREFIX }}
         ISSUE_COUNTER_REPO: ${{ inputs.ISSUE_COUNTER_REPO }}
         GITHUB_REPOSITORY: ${{ github.repository }}
         GITHUB_EVENT_ISSUE_NUMBER: ${{ github.event.issue.number }}
