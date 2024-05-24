@@ -36,7 +36,9 @@ runs:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
         ISSUE_GEN: ${{ inputs.ISSUE_GEN }}
         ISSUE_PREFIX: ${{ inputs.ISSUE_PREFIX }}
-        ISSUE_COUNTER_REPO: ${{ inputs.ISSUE_COUNTER_REPO }}
+        ISSUE_NUMBER: ${{ inputs.ISSUE_NUMBER }}
+        ISSUE_NUMBER_VAR: ${{ inputs.ISSUE_NUMBER_VAR }}
+        ORG_NAME: ${{ inputs.ORG_NAME }}
         GITHUB_REPOSITORY: ${{ github.repository }}
         GITHUB_EVENT_ISSUE_NUMBER: ${{ github.event.issue.number }}
         GITHUB_EVENT_ISSUE_TITLE: ${{ github.event.issue.title }}

@@ -1,22 +1,21 @@
 import os
 import requests
-import subprocess
 
-def get_next_issue_number(issue_counter_repo, token):
-    subprocess.run(["git", "clone", f"https://x-access-token:{token}@github.com/{issue_counter_repo}.git", "issue-counter"], check=True)
-    with open('issue-counter/counter.txt', 'r') as file:
-        current_number = int(file.read().strip())
-    next_number = current_number + 1
-    with open('issue-counter/counter.txt', 'w') as file:
-        file.write(str(next_number))
-    return next_number
 
-def update_issue_counter(next_number):
-    subprocess.run(["git", "-C", "issue-counter", "config", "--global", "user.name", "Issue Number Assigner"], check=True)
-    subprocess.run(["git", "-C", "issue-counter", "config", "--global", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True)
-    subprocess.run(["git", "-C", "issue-counter", "add", "counter.txt"], check=True)
-    subprocess.run(["git", "-C", "issue-counter", "commit", "-m", f"Update issue counter to {next_number}"], check=True)
-    subprocess.run(["git", "-C", "issue-counter", "push"], check=True)
+def update_org_variable(org, var_name, new_value, token):
+    url = f"https://api.github.com/orgs/{org}/actions/variables/{var_name}"
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "Authorization": f"Bearer {token}",
+        "X-GitHub-Api-Version": "2022-11-28"
+    }
+    print(token)
+    data = {
+        "name": var_name,
+        "value": str(new_value)
+    }
+    response = requests.patch(url, headers=headers, json=data)
+    response.raise_for_status()
 
 def update_issue_title(repo, issue_prefix, issue_number, token, next_number, issue_title):
     issue_number_formatted = f"{issue_prefix}-{next_number:03d}"
@@ -33,13 +32,14 @@ def update_issue_title(repo, issue_prefix, issue_number, token, next_number, iss
 
 if __name__ == "__main__":
     github_token = os.getenv('GITHUB_TOKEN')
-    issue_gen_token = os.getenv('ISSUE_GEN')
+    org_var_token = os.getenv('ISSUE_GEN')
     repo = os.getenv('GITHUB_REPOSITORY')
     issue_prefix = os.getenv('ISSUE_PREFIX')
-    issue_number = os.getenv('GITHUB_EVENT_ISSUE_NUMBER')
+    issue_number = os.getenv('ISSUE_NUMBER')
+    issue_number_var = os.getenv('ISSUE_NUMBER_VAR')
     issue_title = os.getenv('GITHUB_EVENT_ISSUE_TITLE')
-    issue_counter_repo = os.getenv('ISSUE_COUNTER_REPO')
+    org_name = os.getenv('ORG_NAME')
 
-    next_number = get_next_issue_number(issue_counter_repo, issue_gen_token)
-    update_issue_counter(next_number)
+    next_number = int(issue_number) + 1
+    update_org_variable(org_name, issue_number_var, next_number, org_var_token)
     update_issue_title(repo, issue_prefix, issue_number, github_token, next_number, issue_title)
