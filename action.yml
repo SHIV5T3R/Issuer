@@ -4,15 +4,19 @@ inputs:
   GITHUB_TOKEN:
     description: "GitHub token"
     required: true
-  ISSUE_GEN:
-    description: "Token for accessing the issue counter repository"
-    required: true
   ISSUE_PREFIX:
     description: "Prefix for issue numbers"
     required: true
-  ISSUE_COUNTER_REPO:
-    description: "Repository for issue counter"
+  ISSUE_COUNTER:
+    description: "Counter value for issue numbers"
     required: true
+  ISSUE_COUNTER_VAR: 
+    description: "Name of the counter value org variable"
+    required: true
+  ORG_NAME: 
+    description: "Name of the organisation"
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -34,10 +38,9 @@ runs:
       run: python ${{ github.action_path }}/main.py    
       env:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
-        ISSUE_GEN: ${{ inputs.ISSUE_GEN }}
         ISSUE_PREFIX: ${{ inputs.ISSUE_PREFIX }}
-        ISSUE_NUMBER: ${{ inputs.ISSUE_NUMBER }}
-        ISSUE_NUMBER_VAR: ${{ inputs.ISSUE_NUMBER_VAR }}
+        ISSUE_COUNTER: ${{ inputs.ISSUE_COUNTER }}
+        ISSUE_COUNTER_VAR: ${{ inputs.ISSUE_counter_VAR }}
         ORG_NAME: ${{ inputs.ORG_NAME }}
         GITHUB_REPOSITORY: ${{ github.repository }}
         GITHUB_EVENT_ISSUE_NUMBER: ${{ github.event.issue.number }}
