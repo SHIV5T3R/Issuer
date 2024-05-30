@@ -7,9 +7,6 @@ inputs:
   ISSUE_PREFIX:
     description: "Prefix for issue numbers"
     required: true
-  ISSUE_COUNTER:
-    description: "Counter value for issue numbers"
-    required: true
   ISSUE_COUNTER_VAR: 
     description: "Name of the counter value org variable"
     required: true
@@ -39,7 +36,6 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
         ISSUE_PREFIX: ${{ inputs.ISSUE_PREFIX }}
-        ISSUE_COUNTER: ${{ inputs.ISSUE_COUNTER }}
         ISSUE_COUNTER_VAR: ${{ inputs.ISSUE_counter_VAR }}
         ORG_NAME: ${{ inputs.ORG_NAME }}
         GITHUB_REPOSITORY: ${{ github.repository }}
